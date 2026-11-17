@@ -31,50 +31,6 @@ jobs:
           playwright install --with-deps chromium
 
       - name: Generate RSS feeds
-        run: |
-          python generate_feed.py || true
-          python generate_esesja.py || true
-          python generate_terazteatr.py || true
-          python generate_imdb.py || true
-
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]"
-
-          name: Update RSS Feeds
-
-on:
-  schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install Playwright Chromium
-        run: |
-          playwright install --with-deps chromium
-
-      - name: Generate RSS feeds
         env:
           GOODREADS_EMAIL: ${{ secrets.GOODREADS_EMAIL }}
           GOODREADS_PASSWORD: ${{ secrets.GOODREADS_PASSWORD }}
@@ -89,10 +45,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]"
-          git add *.xml || true
-          git commit -m "Auto-update RSS feeds" || exit 0
-          git push
-
           git add *.xml || true
           git commit -m "Auto-update RSS feeds" || exit 0
           git push
